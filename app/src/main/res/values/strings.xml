@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Cabaca</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="genres_label">Genres</string>
+    <string name="new_book_label">Buku Terbaru</string>
+    <string name="dummy_text">Boruto the spirit of ninja</string>
+    <string name="book_text">Tentang</string>
+    <string name="reviews_text">Tanggapan</string>
+    <string name="book_details">Informasi Buku</string>
+    <string name="sinopsis_text">Synopsis</string>
+    <string name="short_desc_text">Deskripsi</string>
+    <string name="related_book_text">Buku Serupa</string>
+    <string name="rate_text" formatted="false">Rate %1$d. </string>
+    <string name="status_text" formatted="false">Status : %1$d. </string>
+    <string name="chapter_text">Chapter</string>
+    <string name="hashtags_label">Hashtags</string>
+</resources>
