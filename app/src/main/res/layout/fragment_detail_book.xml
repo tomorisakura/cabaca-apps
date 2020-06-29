@@ -35,12 +35,19 @@
                     android:padding="10dp"
                     tools:ignore="UseCompoundDrawables">
 
-                    <ImageView
-                        android:id="@+id/img_writer"
+                    <com.github.florent37.shapeofview.shapes.CircleView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/dummy_text"
-                        android:src="@drawable/ic_writer_icon" />
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/img_writer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scaleType="fitXY"
+                            android:contentDescription="@string/dummy_text"
+                            android:src="@drawable/ic_writer_icon" />
+
+                    </com.github.florent37.shapeofview.shapes.CircleView>
 
                     <LinearLayout
                         android:layout_width="wrap_content"

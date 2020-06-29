@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.DetailBook
@@ -16,6 +17,7 @@ import com.grepy.msx.cabaca.ui.detail.adapter.ChapterAdapter
 import com.grepy.msx.cabaca.ui.detail.adapter.GenresAdapter
 import com.grepy.msx.cabaca.ui.detail.adapter.HashtagsAdapter
 import com.grepy.msx.cabaca.ui.detail.adapter.RelatedBookAdapter
+import com.grepy.msx.cabaca.utils.Constant
 import kotlinx.android.synthetic.main.fragment_detail_book.*
 
 class DetailBookFragment : Fragment() {
@@ -50,6 +52,8 @@ class DetailBookFragment : Fragment() {
     }
 
     private fun prepareView(detailBook: DetailBook) {
+        val url = Constant.BASE_URL_IMAGE+detailBook.writerId.userByUser.profilePic+ Constant.API_KEY_IMAGE
+        Glide.with(this).load(url).placeholder(R.drawable.ic_writer_icon).into(img_writer)
         tv_writer_name.text = detailBook.writerId.userByUser.name
         tv_writer_username.text = detailBook.writerId.userByUser.username
         tv_book_rate.text = "Rating : " + data?.rateSum.toString()
