@@ -25,4 +25,8 @@ open class RemoteRepository(private val networkConfig: NetworkConfig) {
         networkConfig.getApi().getBookDetail(Constant.HEADERS, id)
     }
 
+    suspend fun getCategoryBook(id: Int) : Call<BookResponse> = withContext(Dispatchers.Default) {
+        networkConfig.getApi().getCategoryBook(Constant.HEADERS, id)
+    }
+
 }

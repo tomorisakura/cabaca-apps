@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
+import com.grepy.msx.cabaca.model.Category
 import com.grepy.msx.cabaca.ui.detail.DetailActivity
 import com.grepy.msx.cabaca.ui.detail.DetailBookFragment
+import com.grepy.msx.cabaca.utils.CategoryBookHelper
 import com.grepy.msx.cabaca.utils.ItemClickedHelper
 import kotlinx.android.synthetic.main.fragment_home.*
 
@@ -48,6 +50,13 @@ class HomeFragment : Fragment() {
         homeViewModel.getCategory().observe(viewLifecycleOwner, Observer {
             categoryItemAdapter.addItems(it)
         })
+
+        categoryItemAdapter.itemCategoryClicked(object  : CategoryBookHelper{
+            override fun itemCategoryClicked(category: Category) {
+                sendToCategoryItem(category)
+            }
+
+        })
     }
 
     private fun getNewBookRv() {
@@ -66,10 +75,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun sendToDetail(book: Book) {
-//        val intent = Intent(activity, DetailActivity::class.java)
-//        intent.putExtra(DetailActivity.BOOK_ITEM, book)
-//        startActivity(intent)
-        val action= HomeFragmentDirections.homeToDetailActivity(book)
+        val intent = Intent(activity, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.NEW_BOOK, book)
+        startActivity(intent)
+    }
+
+    private fun sendToCategoryItem(category: Category) {
+        val action = HomeFragmentDirections.actionHomeFragmentToCategoryActivity(category.id)
         navController.navigate(action)
     }
 

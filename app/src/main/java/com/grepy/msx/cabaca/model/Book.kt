@@ -44,7 +44,7 @@ data class DetailBook(
     @SerializedName("cover_url") val coverUrl : String,
     @SerializedName("status") val status : String,
     @SerializedName("desc") val desc : String,
-    @SerializedName("Writer_by_writer_id") val writerId : Writer,
+    @SerializedName("Writer_by_writer_id") val writerId : Writer?,
     @SerializedName("hashtags") val hashtags : MutableList<Hashtags>,
     @SerializedName("genres") val genres : MutableList<Genres>,
     @SerializedName("Related_by_book") val relatedBook : MutableList<RelatedBook>,
@@ -78,12 +78,7 @@ data class Genres(
 data class Writer(
     @SerializedName("id") val id : Int,
     @SerializedName("user_id") val user_id : Int,
-    @SerializedName("created_at") val created_at : String,
-    @SerializedName("kelas") val kelas : String?,
     @SerializedName("status") val status : String?,
-    @SerializedName("schedule_task") val scheduleTask : String,
-    @SerializedName("royalty_id") val royalty : String?,
-    @SerializedName("type") val type : String,
     @SerializedName("User_by_user_id") val userByUser : User
 ) : Parcelable
 

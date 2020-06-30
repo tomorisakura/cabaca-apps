@@ -8,11 +8,13 @@ import com.bumptech.glide.Glide
 import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.RelatedBook
 import com.grepy.msx.cabaca.utils.Constant
+import com.grepy.msx.cabaca.utils.RelatedBookHelper
 import kotlinx.android.synthetic.main.list_related_book.view.*
 
 class RelatedBookAdapter : RecyclerView.Adapter<RelatedBookAdapter.RelatedViewHolder>() {
 
     private val relatedBook: MutableList<RelatedBook> = mutableListOf()
+    private var relatedBookHelper : RelatedBookHelper? = null
 
     inner class RelatedViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         fun bind(relatedBook: RelatedBook) {
@@ -20,6 +22,7 @@ class RelatedBookAdapter : RecyclerView.Adapter<RelatedBookAdapter.RelatedViewHo
                 val url = Constant.BASE_URL_IMAGE+relatedBook.coverUrl+ Constant.API_KEY_IMAGE
                 Glide.with(it).load(url).placeholder(R.drawable.ic_launcher_foreground).into(it.thumb_related_book)
                 it.tv_title_related_book.text = relatedBook.title
+                it.setOnClickListener { relatedBookHelper?.itemClickRelated(relatedBook) }
             }
         }
     }
@@ -28,6 +31,10 @@ class RelatedBookAdapter : RecyclerView.Adapter<RelatedBookAdapter.RelatedViewHo
         relatedBook.clear()
         relatedBook.addAll(rb)
         notifyDataSetChanged()
+    }
+
+    internal fun onItemRelatedClicked(item : RelatedBookHelper) {
+        this.relatedBookHelper = item
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RelatedViewHolder {

@@ -24,7 +24,7 @@
             <ImageView
                 android:id="@+id/thumb_detail_book"
                 android:layout_width="match_parent"
-                android:layout_height="450dp"
+                android:layout_height="500dp"
                 android:scaleType="fitXY"
                 android:contentDescription="@string/dummy_text"
                 tools:src="@drawable/ic_launcher_foreground"/>

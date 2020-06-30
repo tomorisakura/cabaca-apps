@@ -22,4 +22,7 @@ interface ApiService {
     @GET("book/detail/{book_id}")
     fun getBookDetail(@Header(Constant.X_HEADER) apikey: String, @Path("book_id") bookId : Int) : Call<DetailBookResponse>
 
+    @GET("book/category")
+    fun getCategoryBook(@Header(Constant.X_HEADER) apikey: String, @Query("id") categoryId : Int) : Call<BookResponse>
+
 }

@@ -13,14 +13,16 @@
         <action
             android:id="@+id/home_to_detail_activity"
             app:destination="@id/detailActivity" />
+        <action
+            android:id="@+id/action_homeFragment_to_categoryActivity"
+            app:destination="@id/categoryActivity" />
     </fragment>
 
     <fragment
         android:id="@+id/detailFragment"
         android:name="com.grepy.msx.cabaca.ui.detail.DetailBookFragment"
         android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail_book" >
-    </fragment>
+        tools:layout="@layout/fragment_detail_book" />
 
     <activity
         android:id="@+id/detailActivity"
@@ -30,5 +32,15 @@
         <argument
             android:name="bookItem"
             app:argType="com.grepy.msx.cabaca.model.Book" />
+    </activity>
+    <activity
+        android:id="@+id/categoryActivity"
+        android:name="com.grepy.msx.cabaca.ui.category.CategoryActivity"
+        android:label="activity_category"
+        tools:layout="@layout/activity_category" >
+        <argument
+            android:name="categoryID"
+            app:argType="integer"
+            android:defaultValue="0" />
     </activity>
 </navigation>

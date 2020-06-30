@@ -57,10 +57,11 @@
 
                         <TextView
                             android:id="@+id/tv_writer_name"
-                            android:layout_width="wrap_content"
+                            android:layout_width="200dp"
                             android:layout_height="wrap_content"
                             android:textColor="@color/colorBlack"
                             android:textSize="16sp"
+                            android:lines="1"
                             tools:text="Kyoko Sakura" />
 
                         <TextView
@@ -220,12 +221,20 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="18sp"/>
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_chapter_detail"
+                    <LinearLayout
+                        android:id="@+id/expanded_sub_chapter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"/>
+                        android:orientation="vertical">
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_chapter_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"/>
+
+                    </LinearLayout>
+<!--                    end of parent linear-->
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

@@ -13,8 +13,7 @@ import com.grepy.msx.cabaca.ui.detail.ReviewFragment
 class ViewPager(private val context: Context, private val book: Book, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private var fragment : Fragment? = null
-
-    var title = listOf(R.string.book_text, R.string.reviews_text)
+    private var title = listOf(R.string.book_text, R.string.reviews_text)
 
     override fun getItem(position: Int): Fragment {
         when(position) {

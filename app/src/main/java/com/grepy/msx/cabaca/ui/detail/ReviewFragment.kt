@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.DetailBook
+import com.grepy.msx.cabaca.model.RelatedBook
 import com.grepy.msx.cabaca.ui.detail.adapter.ReviewsAdapter
 import kotlinx.android.synthetic.main.fragment_review.*
 
@@ -31,13 +33,17 @@ class ReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         data = arguments?.getParcelable("bookReviews")
-        prepareObserver(data)
+        prepareObserver()
     }
 
-    private fun prepareObserver(book: Book?) {
-        detailBookViewModel.getDetailBookById(data!!.bookId).observe(viewLifecycleOwner, Observer {
+    private fun prepareObserver() {
+        detailBookViewModel.getDetailBookById(data!!.id).observe(viewLifecycleOwner, Observer {
             it.forEach {
-                prepareView(it)
+                if (it.reviews.isNullOrEmpty()) {
+                    toast("Belum ada review pada buku ${it.title}")
+                } else {
+                    prepareView(it)
+                }
             }
         })
     }
@@ -47,6 +53,10 @@ class ReviewFragment : Fragment() {
         rv_reviewer.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         rv_reviewer.adapter = reviewsAdapter
         reviewsAdapter.addReviewer(detailBook.reviews)
+    }
+
+    private fun toast(message : String) {
+        Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
 
 }
