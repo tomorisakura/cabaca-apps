@@ -10,8 +10,6 @@ import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.network.NetworkConfig
 import com.grepy.msx.cabaca.repository.RemoteRepository
 import com.grepy.msx.cabaca.utils.ResultResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class CategoryBookViewModel : ViewModel() {

@@ -3,18 +3,15 @@ package com.grepy.msx.cabaca.ui.detail
 
 
 
-import android.content.Intent
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -28,6 +25,7 @@ import com.grepy.msx.cabaca.ui.detail.adapter.HashtagsAdapter
 import com.grepy.msx.cabaca.ui.detail.adapter.RelatedBookAdapter
 import com.grepy.msx.cabaca.utils.Constant
 import com.grepy.msx.cabaca.utils.RelatedBookHelper
+import com.grepy.msx.cabaca.utils.ResultResponse
 import kotlinx.android.synthetic.main.fragment_detail_book.*
 
 class DetailBookFragment : Fragment() {
@@ -40,7 +38,6 @@ class DetailBookFragment : Fragment() {
     private var data : Book? = null
 
     private var expanded : Boolean = false
-    private lateinit var navController : NavController
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,10 +54,16 @@ class DetailBookFragment : Fragment() {
 
     private fun prepareObserver(view: View) {
         data = arguments?.getParcelable("bookItem")
-        detailBookViewModel.getDetailBookById(data!!.id, view.context).observe(viewLifecycleOwner, Observer { data ->
-            for (i in 0 until data.size) {
-                prepareView(data[i])
-                disableShimmer()
+        detailBookViewModel.getDetailBookById(data!!.id).observe(viewLifecycleOwner, Observer {item ->
+            when(item.status) {
+                ResultResponse.Status.SUCCESS -> {
+                    item.data?.result?.let {
+                        prepareView(it)
+                    }
+                    disableShimmer()
+                }
+                ResultResponse.Status.LOADING -> toast(view.context, "Loading")
+                ResultResponse.Status.ERROR -> toast(view.context, "RTO")
             }
         })
     }
@@ -73,12 +76,6 @@ class DetailBookFragment : Fragment() {
         tv_book_rate.text = "Rating : " + data?.rateSum.toString()
         tv_book_status.text = "Status : " + detailBook.status
         tv_book_desc.text = detailBook.desc
-
-        img_writer.setOnClickListener {
-            val intent = Intent(activity, WriterActivity::class.java)
-            intent.putExtra(WriterActivity.WRITER_ITEM, detailBook.writerId)
-            startActivity(intent)
-        }
 
         relatedBookAdapter = RelatedBookAdapter()
         rv_related.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
@@ -119,6 +116,10 @@ class DetailBookFragment : Fragment() {
             }
 
         })
+    }
+
+    private fun toast(context: Context, msg : String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun disableShimmer() {

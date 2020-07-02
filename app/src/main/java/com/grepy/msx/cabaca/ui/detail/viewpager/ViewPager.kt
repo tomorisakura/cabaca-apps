@@ -9,11 +9,12 @@ import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.ui.detail.DetailBookFragment
 import com.grepy.msx.cabaca.ui.detail.ReviewFragment
+import com.grepy.msx.cabaca.ui.detail.WriterFragment
 
 class ViewPager(private val context: Context, private val book: Book, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     private var fragment : Fragment? = null
-    private var title = listOf(R.string.book_text, R.string.reviews_text)
+    private var title = listOf(R.string.book_text, R.string.reviews_text, R.string.writer_text)
 
     override fun getItem(position: Int): Fragment {
         when(position) {
@@ -31,12 +32,20 @@ class ViewPager(private val context: Context, private val book: Book, fragmentMa
                 }
                 (fragment as ReviewFragment).arguments = bundle
             }
+
+            2 -> {
+                fragment = WriterFragment()
+                val bundle = Bundle().apply {
+                    this.putParcelable("bookWriter", book)
+                }
+                (fragment as WriterFragment).arguments = bundle
+            }
         }
         return fragment as Fragment
     }
 
     override fun getCount(): Int {
-        return 2
+        return 3
     }
 
     override fun getPageTitle(position: Int): CharSequence? {

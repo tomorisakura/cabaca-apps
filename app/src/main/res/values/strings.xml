@@ -15,4 +15,7 @@
     <string name="status_text" formatted="false">Status : %1$d. </string>
     <string name="chapter_text">Chapter</string>
     <string name="hashtags_label">Hashtags</string>
+    <string name="writer_text">Penulis</string>
+    <string name="karya_text">Karya</string>
+    <string name="about_text">Tentang</string>
 </resources>

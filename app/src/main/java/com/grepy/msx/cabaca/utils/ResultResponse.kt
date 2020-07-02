@@ -1,8 +1,5 @@
 package com.grepy.msx.cabaca.utils
 
-import android.content.Context
-import android.widget.Toast
-
 data class ResultResponse<out T>(val status : Status, val data : T?, val msg : String?) {
 
     companion object {

@@ -12,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/grepyTheme">
-        <activity android:name=".ui.detail.WriterActivity"></activity>
         <activity android:name=".ui.category.CategoryActivity" />
         <activity android:name=".ui.detail.DetailActivity" />
         <activity android:name=".ui.HomeActivity" />

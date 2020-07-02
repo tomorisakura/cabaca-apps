@@ -13,6 +13,7 @@ import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.DetailBook
 import com.grepy.msx.cabaca.ui.detail.adapter.ReviewsAdapter
+import com.grepy.msx.cabaca.utils.ResultResponse
 import kotlinx.android.synthetic.main.fragment_review.*
 
 class ReviewFragment : Fragment() {
@@ -32,17 +33,23 @@ class ReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         data = arguments?.getParcelable("bookReviews")
-        prepareObserver(view)
+        prepareObserver()
     }
 
-    private fun prepareObserver(view: View) {
-        detailBookViewModel.getDetailBookById(data!!.id, view.context).observe(viewLifecycleOwner, Observer {
-            it.forEach {
-                if (it.reviews.isNullOrEmpty()) {
-                    toast("Belum ada review pada buku ${it.title}")
-                } else {
-                    prepareView(it)
+    private fun prepareObserver() {
+        detailBookViewModel.getDetailBookById(data!!.id).observe(viewLifecycleOwner, Observer { item ->
+            when(item.status) {
+                ResultResponse.Status.SUCCESS -> {
+                    item.data?.result?.let {
+                        if (it.reviews.isNullOrEmpty()) {
+                            toast("Belum ada review pada buku ${it.title}")
+                        } else {
+                            prepareView(it)
+                        }
+                    }
                 }
+                ResultResponse.Status.LOADING -> toast("Loading")
+                ResultResponse.Status.ERROR -> toast("RTO")
             }
         })
     }

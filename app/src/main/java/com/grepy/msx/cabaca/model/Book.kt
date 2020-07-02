@@ -20,7 +20,7 @@ data class DetailBookResponse(
 )
 
 data class WriterResponse(
-    @SerializedName("result") val result : Writer?
+    @SerializedName("result") val result : WriterProfile?
 )
 
 @Parcelize
@@ -84,6 +84,27 @@ data class Writer(
     @SerializedName("user_id") val user_id : Int,
     @SerializedName("status") val status : String?,
     @SerializedName("User_by_user_id") val userByUser : User
+) : Parcelable
+
+@Parcelize
+data class WriterProfile(
+    @SerializedName("id") val id : Int,
+    @SerializedName("name") val name : String,
+    @SerializedName("username") val username : String?,
+    @SerializedName("photo_url") val photo : String?,
+    @SerializedName("email") val email : String,
+    @SerializedName("deskripsi") val desc : String?,
+    @SerializedName("karya") val karya : MutableList<Karya>
+
+) : Parcelable
+
+@Parcelize
+data class Karya(
+    @SerializedName("id") val id : Int,
+    @SerializedName("title") val title : String,
+    @SerializedName("status") val status: String,
+    @SerializedName("cover_url") val cover : String,
+    @SerializedName("rate_sum") val rateSum: Double
 ) : Parcelable
 
 @Parcelize

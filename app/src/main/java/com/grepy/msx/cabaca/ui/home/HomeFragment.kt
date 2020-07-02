@@ -3,25 +3,25 @@ package com.grepy.msx.cabaca.ui.home
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.Category
 import com.grepy.msx.cabaca.ui.detail.DetailActivity
-import com.grepy.msx.cabaca.ui.detail.DetailBookFragment
 import com.grepy.msx.cabaca.utils.CategoryBookHelper
 import com.grepy.msx.cabaca.utils.ItemClickedHelper
+import com.grepy.msx.cabaca.utils.ResultResponse
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -65,10 +65,22 @@ class HomeFragment : Fragment() {
         categoryItemAdapter = CategoryItemAdapter()
         rv_category.layoutManager = GridLayoutManager(activity, 2, GridLayoutManager.HORIZONTAL, false)
         rv_category.adapter = categoryItemAdapter
-        homeViewModel.getCategory(view.context).observe(viewLifecycleOwner, Observer {
-            categoryItemAdapter.addItems(it)
-            shimmer_category.stopShimmer()
-            shimmer_category.visibility = View.GONE
+        homeViewModel.getCategory().observe(viewLifecycleOwner, Observer { item ->
+            when(item.status) {
+             ResultResponse.Status.SUCCESS -> {
+                 try {
+                     item.data?.resource?.let {
+                         categoryItemAdapter.addItems(it)
+                     }
+                     shimmer_category.stopShimmer()
+                     shimmer_category.visibility = View.GONE
+                 }catch (e : Exception) {
+                     Log.e("Error", e.message.toString())
+                 }
+             }
+                ResultResponse.Status.LOADING -> toast(view.context, "Loading")
+                ResultResponse.Status.ERROR -> toast(view.context, "RTO")
+            }
         })
 
         categoryItemAdapter.itemCategoryClicked(object  : CategoryBookHelper{
@@ -83,10 +95,18 @@ class HomeFragment : Fragment() {
         newBookAdapter = NewBookAdapter()
         rv_book_home.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         rv_book_home.adapter = newBookAdapter
-        homeViewModel.getNewBook(view.context).observe(viewLifecycleOwner, Observer {
-            newBookAdapter.addBook(it)
-            shimmer_new_book.stopShimmer()
-            shimmer_new_book.visibility = View.GONE
+        homeViewModel.getNewBook().observe(viewLifecycleOwner, Observer {item ->
+            when(item.status) {
+                ResultResponse.Status.SUCCESS -> {
+                    item.data?.result?.let {
+                        newBookAdapter.addBook(it)
+                        shimmer_new_book.stopShimmer()
+                        shimmer_new_book.visibility = View.GONE
+                    }
+                }
+                ResultResponse.Status.LOADING -> toast(view.context, "Loading")
+                ResultResponse.Status.ERROR -> toast(view.context, "RTO")
+            }
         })
 
         newBookAdapter.onItemClicked(object : ItemClickedHelper{
@@ -105,6 +125,10 @@ class HomeFragment : Fragment() {
     private fun sendToCategoryItem(category: Category) {
         val action = HomeFragmentDirections.actionHomeFragmentToCategoryActivity(category)
         navController.navigate(action)
+    }
+
+    private fun toast(context: Context, msg : String) {
+        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
     }
 
 }

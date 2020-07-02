@@ -5,7 +5,6 @@ package com.grepy.msx.cabaca.network
 import android.accounts.NetworkErrorException
 import com.grepy.msx.cabaca.utils.ResultResponse
 import retrofit2.Response
-import java.io.IOException
 import java.util.concurrent.TimeoutException
 
 open class SafeApiRequest {
