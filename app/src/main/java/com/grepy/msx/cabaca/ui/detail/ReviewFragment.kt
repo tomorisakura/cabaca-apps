@@ -1,18 +1,17 @@
 package com.grepy.msx.cabaca.ui.detail
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.DetailBook
-import com.grepy.msx.cabaca.model.RelatedBook
 import com.grepy.msx.cabaca.ui.detail.adapter.ReviewsAdapter
 import kotlinx.android.synthetic.main.fragment_review.*
 
@@ -33,11 +32,11 @@ class ReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         data = arguments?.getParcelable("bookReviews")
-        prepareObserver()
+        prepareObserver(view)
     }
 
-    private fun prepareObserver() {
-        detailBookViewModel.getDetailBookById(data!!.id).observe(viewLifecycleOwner, Observer {
+    private fun prepareObserver(view: View) {
+        detailBookViewModel.getDetailBookById(data!!.id, view.context).observe(viewLifecycleOwner, Observer {
             it.forEach {
                 if (it.reviews.isNullOrEmpty()) {
                     toast("Belum ada review pada buku ${it.title}")

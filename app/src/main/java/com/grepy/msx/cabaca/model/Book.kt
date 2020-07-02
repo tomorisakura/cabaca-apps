@@ -19,6 +19,10 @@ data class DetailBookResponse(
     @SerializedName("result") val result : DetailBook
 )
 
+data class WriterResponse(
+    @SerializedName("result") val result : Writer?
+)
+
 @Parcelize
 data class Book(
     @SerializedName("id") val id : Int,

@@ -1,5 +1,6 @@
 package com.grepy.msx.cabaca.ui.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +13,8 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.grepy.msx.cabaca.R
 import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.Category
@@ -39,16 +42,33 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         navController = Navigation.findNavController(view)
-        getCategoryRv()
-        getNewBookRv()
+        view.let {
+            getCategoryRv(it)
+            getNewBookRv(it)
+        }
     }
 
-    private fun getCategoryRv() {
+
+    override fun onResume() {
+        super.onResume()
+        shimmer_category.startShimmer()
+        shimmer_new_book.startShimmer()
+    }
+
+    override fun onPause() {
+        shimmer_category.stopShimmer()
+        shimmer_new_book.stopShimmer()
+        super.onPause()
+    }
+
+    private fun getCategoryRv(view: View) {
         categoryItemAdapter = CategoryItemAdapter()
         rv_category.layoutManager = GridLayoutManager(activity, 2, GridLayoutManager.HORIZONTAL, false)
         rv_category.adapter = categoryItemAdapter
-        homeViewModel.getCategory().observe(viewLifecycleOwner, Observer {
+        homeViewModel.getCategory(view.context).observe(viewLifecycleOwner, Observer {
             categoryItemAdapter.addItems(it)
+            shimmer_category.stopShimmer()
+            shimmer_category.visibility = View.GONE
         })
 
         categoryItemAdapter.itemCategoryClicked(object  : CategoryBookHelper{
@@ -59,12 +79,14 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun getNewBookRv() {
+    private fun getNewBookRv(view: View) {
         newBookAdapter = NewBookAdapter()
         rv_book_home.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         rv_book_home.adapter = newBookAdapter
-        homeViewModel.getNewBook().observe(viewLifecycleOwner, Observer {
+        homeViewModel.getNewBook(view.context).observe(viewLifecycleOwner, Observer {
             newBookAdapter.addBook(it)
+            shimmer_new_book.stopShimmer()
+            shimmer_new_book.visibility = View.GONE
         })
 
         newBookAdapter.onItemClicked(object : ItemClickedHelper{
@@ -81,7 +103,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun sendToCategoryItem(category: Category) {
-        val action = HomeFragmentDirections.actionHomeFragmentToCategoryActivity(category.id)
+        val action = HomeFragmentDirections.actionHomeFragmentToCategoryActivity(category)
         navController.navigate(action)
     }
 

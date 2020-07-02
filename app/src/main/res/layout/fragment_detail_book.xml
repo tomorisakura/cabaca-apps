@@ -26,6 +26,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_writer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include layout="@layout/list_dummy_text"/>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -41,11 +50,11 @@
 
                         <ImageView
                             android:id="@+id/img_writer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:scaleType="fitXY"
                             android:contentDescription="@string/dummy_text"
-                            android:src="@drawable/ic_writer_icon" />
+                            tools:src="@drawable/ic_writer_icon" />
 
                     </com.github.florent37.shapeofview.shapes.CircleView>
 
@@ -121,6 +130,13 @@
                         android:textSize="18sp"
                         android:text="@string/genres_label"/>
 
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmer_genres"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/list_dummy_text"/>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_marginTop="10dp"
                         android:id="@+id/rv_genres_detail"
@@ -152,6 +168,13 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="18sp"
                         android:text="@string/hashtags_label"/>
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmer_tags"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/list_dummy_text"/>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_tags"
@@ -186,6 +209,13 @@
                         android:textColor="@color/colorBlack"
                         android:textSize="18sp"/>
 
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmer_desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <include layout="@layout/list_dummy_text"/>
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
                     <TextView
                         android:id="@+id/tv_book_desc"
                         android:layout_width="wrap_content"
@@ -211,21 +241,44 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/chapter_text"
-                        android:textColor="@color/colorBlack"
-                        android:textSize="18sp"/>
+                        android:padding="10dp"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chapter_text"
+                            android:textColor="@color/colorBlack"
+                            android:textSize="18sp"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                            android:contentDescription="@string/dummy_text"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/expanded_sub_chapter"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="10dp"
                         android:orientation="vertical">
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/shimmer_chapter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <include layout="@layout/list_dummy_text"/>
+                            <include layout="@layout/list_dummy_text"/>
+                        </com.facebook.shimmer.ShimmerFrameLayout>
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_chapter_detail"
@@ -234,9 +287,8 @@
                             android:layout_marginTop="10dp"/>
 
                     </LinearLayout>
-<!--                    end of parent linear-->
+                    <!--                    end of parent linear-->
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
             <TextView
@@ -260,6 +312,25 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/related_label"/>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_related"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/related_label">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/list_dummy"/>
+                    <include layout="@layout/list_dummy"/>
+
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -39,8 +39,7 @@
         android:label="activity_category"
         tools:layout="@layout/activity_category" >
         <argument
-            android:name="categoryID"
-            app:argType="integer"
-            android:defaultValue="0" />
+            android:name="categoryItem"
+            app:argType="com.grepy.msx.cabaca.model.Category" />
     </activity>
 </navigation>

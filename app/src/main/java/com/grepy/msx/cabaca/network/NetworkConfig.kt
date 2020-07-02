@@ -7,13 +7,14 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class NetworkConfig {
+object NetworkConfig {
 
     private fun getInterceptor() : OkHttpClient {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
 
-        return OkHttpClient.Builder().addInterceptor(httpLoggingInterceptor)
+        return OkHttpClient.Builder()
+            .addInterceptor(httpLoggingInterceptor)
             .connectTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS)
             .retryOnConnectionFailure(true)

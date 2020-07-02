@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.grepy.msx.cabaca">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -11,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/grepyTheme">
-        <activity android:name=".ui.category.CategoryActivity"></activity>
+        <activity android:name=".ui.detail.WriterActivity"></activity>
+        <activity android:name=".ui.category.CategoryActivity" />
         <activity android:name=".ui.detail.DetailActivity" />
         <activity android:name=".ui.HomeActivity" />
         <activity android:name=".MainActivity">
