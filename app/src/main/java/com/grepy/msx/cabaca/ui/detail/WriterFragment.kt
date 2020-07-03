@@ -16,6 +16,7 @@ import com.grepy.msx.cabaca.model.WriterProfile
 import com.grepy.msx.cabaca.ui.detail.adapter.KaryaAdapter
 import com.grepy.msx.cabaca.utils.Constant
 import com.grepy.msx.cabaca.utils.ResultResponse
+import com.grepy.msx.cabaca.utils.Status
 import kotlinx.android.synthetic.main.fragment_writer.*
 
 class WriterFragment : Fragment() {
@@ -42,15 +43,15 @@ class WriterFragment : Fragment() {
         data?.let {
             detailBookViewModel.getWriterId(it.writerByWriterId.user_id).observe(viewLifecycleOwner, Observer { item ->
                 when(item.status) {
-                    ResultResponse.Status.SUCCESS -> {
+                    Status.SUCCESS -> {
                         item.data?.result?.let {
                             prepareView(it, view)
                             shimmer_bio.visibility = View.GONE
                             shimmer_karya.visibility = View.GONE
                         }
                     }
-                    ResultResponse.Status.LOADING -> toast("Loading")
-                    ResultResponse.Status.ERROR -> toast("Lose Connection")
+                    Status.LOADING -> startShimmer()
+                    Status.ERROR -> toast(item.msg.toString())
                 }
             })
         }
@@ -73,15 +74,8 @@ class WriterFragment : Fragment() {
         Toast.makeText(activity, msg, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun startShimmer() {
         shimmer_bio.startShimmer()
         shimmer_karya.startShimmer()
-    }
-
-    override fun onPause() {
-        shimmer_karya.stopShimmer()
-        shimmer_bio.stopShimmer()
-        super.onPause()
     }
 }

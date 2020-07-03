@@ -9,26 +9,26 @@ import com.grepy.msx.cabaca.network.SafeApiRequest
 import com.grepy.msx.cabaca.utils.Constant
 import com.grepy.msx.cabaca.utils.ResultResponse
 
-open class RemoteRepository(private val networkConfig: NetworkConfig) : SafeApiRequest() {
+open class RemoteRepository : SafeApiRequest() {
 
-    suspend fun getCategoryItems() : ResultResponse<CategoryResponse> {
-        return safeApiCall { networkConfig.getApi().getCategoryItems(Constant.HEADERS) }
+    suspend fun getCategoryItems() : CategoryResponse {
+        return safeApiCall { NetworkConfig.getApi().getCategoryItems(Constant.HEADERS) }
     }
 
-    suspend fun getNewBookItems() : ResultResponse<BookResponse> {
-        return safeApiCall { networkConfig.getApi().getNewBook(Constant.HEADERS, 7) }
+    suspend fun getNewBookItems() : BookResponse {
+        return safeApiCall { NetworkConfig.getApi().getNewBook(Constant.HEADERS, 10) }
     }
 
-    suspend fun getBookDetail(id : Int) : ResultResponse<DetailBookResponse> {
-        return safeApiCall { networkConfig.getApi().getBookDetail(Constant.HEADERS, id) }
+    suspend fun getBookDetail(id : Int) : DetailBookResponse {
+        return safeApiCall { NetworkConfig.getApi().getBookDetail(Constant.HEADERS, id) }
     }
 
-    suspend fun getCategoryBook(id: Int) : ResultResponse<BookResponse> {
-        return safeApiCall { networkConfig.getApi().getCategoryBook(Constant.HEADERS, id) }
+    suspend fun getCategoryBook(id: Int) : BookResponse {
+        return safeApiCall { NetworkConfig.getApi().getCategoryBook(Constant.HEADERS, id) }
     }
 
-    suspend fun getWriterId(id: Int) : ResultResponse<WriterResponse> {
-        return safeApiCall { networkConfig.getApi().getUserById(Constant.HEADERS, id) }
+    suspend fun getWriterId(id: Int) : WriterResponse {
+        return safeApiCall { NetworkConfig.getApi().getUserById(Constant.HEADERS, id) }
     }
 
 }

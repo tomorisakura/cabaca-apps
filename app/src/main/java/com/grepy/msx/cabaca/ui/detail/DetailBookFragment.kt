@@ -26,6 +26,7 @@ import com.grepy.msx.cabaca.ui.detail.adapter.RelatedBookAdapter
 import com.grepy.msx.cabaca.utils.Constant
 import com.grepy.msx.cabaca.utils.RelatedBookHelper
 import com.grepy.msx.cabaca.utils.ResultResponse
+import com.grepy.msx.cabaca.utils.Status
 import kotlinx.android.synthetic.main.fragment_detail_book.*
 
 class DetailBookFragment : Fragment() {
@@ -56,14 +57,14 @@ class DetailBookFragment : Fragment() {
         data = arguments?.getParcelable("bookItem")
         detailBookViewModel.getDetailBookById(data!!.id).observe(viewLifecycleOwner, Observer {item ->
             when(item.status) {
-                ResultResponse.Status.SUCCESS -> {
+                Status.LOADING -> startShimmer()
+                Status.ERROR -> toast(view.context, item.msg.toString())
+                Status.SUCCESS -> {
                     item.data?.result?.let {
                         prepareView(it)
                     }
                     disableShimmer()
                 }
-                ResultResponse.Status.LOADING -> toast(view.context, "Loading")
-                ResultResponse.Status.ERROR -> toast(view.context, "RTO")
             }
         })
     }
@@ -123,13 +124,6 @@ class DetailBookFragment : Fragment() {
     }
 
     private fun disableShimmer() {
-//        shimmer_writer.stopShimmer()
-//        shimmer_genres.stopShimmer()
-//        shimmer_tags.stopShimmer()
-//        shimmer_desc.stopShimmer()
-//        shimmer_chapter.stopShimmer()
-//        shimmer_related.stopShimmer()
-
         shimmer_writer.visibility = View.GONE
         shimmer_genres.visibility = View.GONE
         shimmer_tags.visibility = View.GONE
@@ -138,24 +132,13 @@ class DetailBookFragment : Fragment() {
         shimmer_related.visibility = View.GONE
     }
 
-    override fun onResume() {
-        super.onResume()
+    private fun startShimmer() {
         shimmer_writer.startShimmer()
         shimmer_genres.startShimmer()
         shimmer_tags.startShimmer()
         shimmer_desc.startShimmer()
         shimmer_chapter.startShimmer()
         shimmer_related.startShimmer()
-    }
-
-    override fun onPause() {
-        shimmer_writer.stopShimmer()
-        shimmer_genres.stopShimmer()
-        shimmer_tags.stopShimmer()
-        shimmer_desc.stopShimmer()
-        shimmer_chapter.stopShimmer()
-        shimmer_related.stopShimmer()
-        super.onPause()
     }
 
 }

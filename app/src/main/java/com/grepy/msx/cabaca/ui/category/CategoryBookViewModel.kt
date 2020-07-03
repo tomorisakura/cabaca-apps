@@ -7,36 +7,28 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grepy.msx.cabaca.model.Book
+import com.grepy.msx.cabaca.model.BookResponse
 import com.grepy.msx.cabaca.network.NetworkConfig
 import com.grepy.msx.cabaca.repository.RemoteRepository
 import com.grepy.msx.cabaca.utils.ResultResponse
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class CategoryBookViewModel : ViewModel() {
 
-    private val remoteRepository : RemoteRepository = RemoteRepository(NetworkConfig)
-    private var bookLiveData : MutableLiveData<MutableList<Book>> = MutableLiveData()
+    private val remoteRepository : RemoteRepository by lazy { RemoteRepository() }
+    private var bookLiveData : MutableLiveData<ResultResponse<BookResponse>> = MutableLiveData()
 
-    internal fun getBookByCategory(id : Int, context: Context) : LiveData<MutableList<Book>> {
+    internal fun getBookByCategory(id : Int, context: Context) : LiveData<ResultResponse<BookResponse>> {
         viewModelScope.launch {
-            val response = remoteRepository.getCategoryBook(id)
-            when(response.status) {
-                ResultResponse.Status.SUCCESS -> {
-                    response.data?.result.let {
-                        bookLiveData.postValue(it)
-                    }
-                }
-
-                ResultResponse.Status.LOADING -> toast("loading", context)
-
-                ResultResponse.Status.ERROR -> toast("RTO \uD83D\uDE25", context)
+            bookLiveData.postValue(ResultResponse.loading(null, "Loading"))
+            try {
+                val response = remoteRepository.getCategoryBook(id)
+                bookLiveData.postValue(ResultResponse.success(response))
+            } catch (e : Exception) {
+                bookLiveData.postValue(ResultResponse.error(null, e.message.toString()))
             }
         }
         return bookLiveData
     }
-
-    private fun toast(msg : String, context: Context) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
-    }
-
 }

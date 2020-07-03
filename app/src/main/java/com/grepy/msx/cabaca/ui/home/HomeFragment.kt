@@ -22,6 +22,7 @@ import com.grepy.msx.cabaca.ui.detail.DetailActivity
 import com.grepy.msx.cabaca.utils.CategoryBookHelper
 import com.grepy.msx.cabaca.utils.ItemClickedHelper
 import com.grepy.msx.cabaca.utils.ResultResponse
+import com.grepy.msx.cabaca.utils.Status
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -48,17 +49,9 @@ class HomeFragment : Fragment() {
         }
     }
 
-
-    override fun onResume() {
-        super.onResume()
+    private fun startShimmer() {
         shimmer_category.startShimmer()
         shimmer_new_book.startShimmer()
-    }
-
-    override fun onPause() {
-        shimmer_category.stopShimmer()
-        shimmer_new_book.stopShimmer()
-        super.onPause()
     }
 
     private fun getCategoryRv(view: View) {
@@ -67,19 +60,15 @@ class HomeFragment : Fragment() {
         rv_category.adapter = categoryItemAdapter
         homeViewModel.getCategory().observe(viewLifecycleOwner, Observer { item ->
             when(item.status) {
-             ResultResponse.Status.SUCCESS -> {
-                 try {
-                     item.data?.resource?.let {
-                         categoryItemAdapter.addItems(it)
-                     }
-                     shimmer_category.stopShimmer()
-                     shimmer_category.visibility = View.GONE
-                 }catch (e : Exception) {
-                     Log.e("Error", e.message.toString())
-                 }
-             }
-                ResultResponse.Status.LOADING -> toast(view.context, "Loading")
-                ResultResponse.Status.ERROR -> toast(view.context, "RTO")
+                Status.LOADING -> startShimmer()
+                Status.ERROR -> toast(view.context, item.msg.toString())
+                Status.SUCCESS -> {
+                    item.data?.resource?.let {
+                        categoryItemAdapter.addItems(it)
+                    }
+                    shimmer_category.stopShimmer()
+                    shimmer_category.visibility = View.GONE
+                }
             }
         })
 
@@ -93,19 +82,19 @@ class HomeFragment : Fragment() {
 
     private fun getNewBookRv(view: View) {
         newBookAdapter = NewBookAdapter()
-        rv_book_home.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        rv_book_home.layoutManager = GridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false)
         rv_book_home.adapter = newBookAdapter
         homeViewModel.getNewBook().observe(viewLifecycleOwner, Observer {item ->
             when(item.status) {
-                ResultResponse.Status.SUCCESS -> {
+                Status.LOADING -> startShimmer()
+                Status.ERROR -> toast(view.context, item.msg.toString())
+                Status.SUCCESS -> {
                     item.data?.result?.let {
                         newBookAdapter.addBook(it)
                         shimmer_new_book.stopShimmer()
                         shimmer_new_book.visibility = View.GONE
                     }
                 }
-                ResultResponse.Status.LOADING -> toast(view.context, "Loading")
-                ResultResponse.Status.ERROR -> toast(view.context, "RTO")
             }
         })
 

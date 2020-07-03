@@ -14,19 +14,20 @@ import kotlinx.coroutines.launch
 
 class DetailBookViewModel : ViewModel() {
 
-    private val remoteRepository : RemoteRepository by lazy { RemoteRepository(NetworkConfig) }
+    private val remoteRepository : RemoteRepository by lazy { RemoteRepository() }
     private val bookLiveData : MutableLiveData<ResultResponse<DetailBookResponse>> = MutableLiveData()
     private val writerData : MutableLiveData<ResultResponse<WriterResponse>> = MutableLiveData()
 
     fun getDetailBookById(id : Int) : LiveData<ResultResponse<DetailBookResponse>> {
         viewModelScope.launch {
-            val response = remoteRepository.getBookDetail(id)
+            bookLiveData.postValue(ResultResponse.loading(null, "Loading"))
             try {
+                val response = remoteRepository.getBookDetail(id)
                 response.let {
-                    bookLiveData.postValue(it)
+                    bookLiveData.postValue(ResultResponse.success(it))
                 }
             }catch (e : Exception) {
-                Log.e("errDetailResponse", e.message.toString())
+                bookLiveData.postValue(ResultResponse.error(null, e.message.toString()))
             }
         }
         return bookLiveData
@@ -34,9 +35,14 @@ class DetailBookViewModel : ViewModel() {
 
     fun getWriterId(id: Int) : LiveData<ResultResponse<WriterResponse>> {
         viewModelScope.launch {
-            val response = remoteRepository.getWriterId(id)
-            response.let {
-                writerData.postValue(it)
+            writerData.postValue(ResultResponse.loading(null, "Loading"))
+            try {
+                val response = remoteRepository.getWriterId(id)
+                response.let {
+                    writerData.postValue(ResultResponse.success(it))
+                }
+            }catch (e : Exception) {
+                writerData.postValue(ResultResponse.error(null, e.message.toString()))
             }
         }
         return writerData

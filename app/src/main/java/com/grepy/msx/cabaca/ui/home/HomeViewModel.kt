@@ -11,19 +11,25 @@ import com.grepy.msx.cabaca.network.NetworkConfig
 import com.grepy.msx.cabaca.repository.RemoteRepository
 import com.grepy.msx.cabaca.utils.ResultResponse
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class HomeViewModel : ViewModel() {
 
-    private val remoteRepository : RemoteRepository by lazy { RemoteRepository(NetworkConfig) }
+    private val remoteRepository : RemoteRepository by lazy { RemoteRepository() }
 
     private val bookData : MutableLiveData<ResultResponse<BookResponse>> = MutableLiveData()
     private val categoryData : MutableLiveData<ResultResponse<CategoryResponse>> = MutableLiveData()
 
     fun getCategory() : LiveData<ResultResponse<CategoryResponse>> {
         viewModelScope.launch {
-            val response = remoteRepository.getCategoryItems()
-            response.let {
-                categoryData.postValue(it)
+            categoryData.postValue(ResultResponse.loading(null, "Loading"))
+            try {
+                val response = remoteRepository.getCategoryItems()
+                response.let {
+                    categoryData.postValue(ResultResponse.success(it))
+                }
+            } catch (e : Exception) {
+                categoryData.postValue(ResultResponse.error(null, e.message.toString()))
             }
         }
         return categoryData
@@ -31,9 +37,14 @@ class HomeViewModel : ViewModel() {
 
     fun getNewBook() : LiveData<ResultResponse<BookResponse>> {
         viewModelScope.launch {
-            val response = remoteRepository.getNewBookItems()
-            response.let {
-                bookData.postValue(it)
+            bookData.postValue(ResultResponse.loading(null, "Loading"))
+            try {
+                val response = remoteRepository.getNewBookItems()
+                response.let {
+                    bookData.postValue(ResultResponse.success(it))
+                }
+            }catch (e : Exception) {
+                bookData.postValue(ResultResponse.error(null, e.message.toString()))
             }
         }
         return bookData

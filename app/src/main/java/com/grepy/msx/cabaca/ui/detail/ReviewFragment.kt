@@ -1,6 +1,7 @@
 package com.grepy.msx.cabaca.ui.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.DetailBook
 import com.grepy.msx.cabaca.ui.detail.adapter.ReviewsAdapter
 import com.grepy.msx.cabaca.utils.ResultResponse
+import com.grepy.msx.cabaca.utils.Status
 import kotlinx.android.synthetic.main.fragment_review.*
 
 class ReviewFragment : Fragment() {
@@ -39,7 +41,7 @@ class ReviewFragment : Fragment() {
     private fun prepareObserver() {
         detailBookViewModel.getDetailBookById(data!!.id).observe(viewLifecycleOwner, Observer { item ->
             when(item.status) {
-                ResultResponse.Status.SUCCESS -> {
+                Status.SUCCESS -> {
                     item.data?.result?.let {
                         if (it.reviews.isNullOrEmpty()) {
                             toast("Belum ada review pada buku ${it.title}")
@@ -48,8 +50,8 @@ class ReviewFragment : Fragment() {
                         }
                     }
                 }
-                ResultResponse.Status.LOADING -> toast("Loading")
-                ResultResponse.Status.ERROR -> toast("RTO")
+                Status.LOADING -> Log.e("loading", "on Review fragment")
+                Status.ERROR -> toast(item.msg.toString())
             }
         })
     }

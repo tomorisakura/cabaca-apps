@@ -14,6 +14,8 @@ import com.grepy.msx.cabaca.model.Book
 import com.grepy.msx.cabaca.model.Category
 import com.grepy.msx.cabaca.ui.detail.DetailActivity
 import com.grepy.msx.cabaca.utils.ItemClickedHelper
+import com.grepy.msx.cabaca.utils.Status
+import com.grepy.msx.cabaca.utils.toast
 import kotlinx.android.synthetic.main.activity_category.*
 
 class CategoryActivity : AppCompatActivity() {
@@ -42,10 +44,18 @@ class CategoryActivity : AppCompatActivity() {
         categoryBookAdapter = CategoryBookAdapter()
         rv_category_item.layoutManager = GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false)
         rv_category_item.adapter = categoryBookAdapter
-        categoryBookViewModel.getBookByCategory(category!!.id, this).observe(this, Observer {
-            categoryBookAdapter.addBook(it)
-            shimmer_category_list.stopShimmer()
-            shimmer_category_list.visibility = View.GONE
+        categoryBookViewModel.getBookByCategory(category!!.id, this).observe(this, Observer {item->
+            when(item.status) {
+                Status.LOADING -> shimmer_category_list.startShimmer()
+                Status.ERROR -> toast(this, item.msg.toString())
+                Status.SUCCESS -> {
+                    item.data?.result?.let {
+                        categoryBookAdapter.addBook(it)
+                        shimmer_category_list.stopShimmer()
+                        shimmer_category_list.visibility = View.GONE
+                    }
+                }
+            }
         })
         categoryBookAdapter.onBookItemClicked(object : ItemClickedHelper{
             override fun itemClickedNewBook(book: Book) {
@@ -54,6 +64,8 @@ class CategoryActivity : AppCompatActivity() {
 
         })
     }
+
+
 
     private fun sendToDetail(book: Book) {
         val intent = Intent(this, DetailActivity::class.java)
